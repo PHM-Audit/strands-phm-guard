@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "strands-phm-guard"
+version = "0.1.0"
+description = "Deterministic physics/bounds intervention handler for Strands Agents (no model in the loop)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "Apache-2.0"}
+authors = [{name = "PHM-Audit"}]
+dependencies = ["phm-lite-check>=1.0"]
+keywords = ["strands-agents", "intervention", "physics", "guardrail", "deterministic"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: Apache Software License",
+]
+
+[project.urls]
+Homepage = "https://github.com/PHM-Audit/strands-phm-guard"
+
+[tool.setuptools.packages.find]
+where = ["src"]
