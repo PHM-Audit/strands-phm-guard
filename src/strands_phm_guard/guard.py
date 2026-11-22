@@ -155,5 +155,6 @@ class PhysicsGuard(InterventionHandler):
             self.stats.denied += 1
             return Deny(reason=f"physics guard veto: {detail}")
         self.stats.guided += 1
-        return Guide(message=f"physics guard: recheck arguments - {detail}")
+        detail_text = "physics guard: recheck arguments - " + detail
+        return Guide(feedback=detail_text)
 
