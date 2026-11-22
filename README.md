@@ -43,7 +43,33 @@ pip install phm-lite-check pytest
 pytest tests/ -q
 ```
 
-16 tests, no network, fully deterministic.
+50 tests, no network, fully deterministic.
+
+## MHS-style hardware action guard (v0.2.0)
+
+New in 0.2.0: a rule-table guard aligned with the Model Hardware Standard (MHS)
+research-preview driver model — AI agents operate physical devices through
+read/write primitives ("get temperature", "set temperature"). Before such a
+command reaches hardware, `check_device_command` validates it deterministically:
+
+- **Absolute-zero floor**: temperature writes below 0 K / -273.15 °C / -459.67 °F are flagged (unit-aware).
+- **Device envelopes**: per-parameter safety ranges (pH 0–14, humidity 0–100 %, pressure, voltage, RPM, ...) — out-of-range writes are flagged with the envelope that fired.
+- **Command shape**: write commands carrying no value, read commands carrying a payload, unknown actions, empty parameters, and unit/param mismatches are all flagged.
+- **Non-finite rejection**: NaN/±inf writes never pass.
+- **Audit chain**: SHA-256 verdict chain over (rule inputs → verdict), recomputable offline.
+
+```python
+from strands_phm_guard.mhs import check_device_command, MHSActionGuard
+
+check_device_command("write", "temperature_c", -300.0)
+# -> ['temperature_c=-300.0 is below absolute zero (envelope temperature_c: [-273.15, 2000.0])']
+
+guard = MHSActionGuard(mode="deny")   # or "guide"; denies/guides only device-shaped calls
+```
+
+This is an independent, deterministic implementation aligned with publicly
+described MHS concepts (read/write primitives, device safety limits); it is not
+an official SDK and implements no Anthropic protocol internals.
 
 ## Scope note
 
