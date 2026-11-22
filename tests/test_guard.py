@@ -75,7 +75,7 @@ def test_hook_deny():
 def test_hook_guide():
     g = PhysicsGuard(mode="guide")
     a = g.before_tool_call(FakeEvent({"input": {"power": -1}}))
-    assert isinstance(a, Guide) and "recheck" in a.message
+    assert isinstance(a, Guide) and "recheck" in getattr(a, "feedback", getattr(a, "message", ""))
 
 
 def test_stats_recomputable():
