@@ -221,7 +221,7 @@ class MHSActionGuard:
             self.stats.denied += 1
             return Deny(reason=f"mhs action guard veto: {detail}")
         self.stats.guided += 1
-        return Guide(message=f"mhs action guard: recheck command - {detail}")
+        return Guide(feedback="mhs action guard: recheck command - " + detail)
 
 
 # reuse lifecycle primitives from guard.py at import time to avoid duplication drift
