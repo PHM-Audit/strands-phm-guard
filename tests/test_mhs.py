@@ -208,7 +208,7 @@ def test_handler_deny_on_violation():
     ev = _FakeEvent({"name": "set_temperature",
                      "input": {"param": "temperature_c", "value": -300.0}})
     out = g._on_hook(ev)
-    assert out.action == "deny" or getattr(out, "action", "") == "deny"
+    assert type(out).__name__ == "Deny"
     assert "below absolute zero" in getattr(out, "reason", "") or "veto" in getattr(out, "reason", "")
 
 
@@ -217,7 +217,7 @@ def test_handler_guide_mode():
     ev = _FakeEvent({"name": "set_temperature",
                      "input": {"param": "temperature_c", "value": -300.0}})
     out = g._on_hook(ev)
-    assert getattr(out, "action", "") == "guide"
+    assert type(out).__name__ == "Guide"
     assert getattr(g.stats, "guided") == 1
 
 
@@ -226,7 +226,7 @@ def test_handler_pass_on_clean_device_call():
     ev = _FakeEvent({"name": "set_temperature",
                      "input": {"param": "temperature_c", "value": 25.0}})
     out = g._on_hook(ev)
-    assert getattr(out, "action", "") == "proceed"
+    assert type(out).__name__ == "Proceed"
     assert g.stats.allowed == 1
 
 
@@ -235,13 +235,13 @@ def test_handler_ignores_non_device_tools():
     ev = _FakeEvent({"name": "calculator",
                      "input": {"param": "temperature_c", "value": -300.0}})
     out = g._on_hook(ev)
-    assert getattr(out, "action", "") == "proceed"
+    assert type(out).__name__ == "Proceed"
 
 
 def test_handler_passes_on_irrelevant_event():
     g = mhs.MHSActionGuard(mode="deny")
     out = g._on_hook(_FakeEvent({"other": 1}))
-    assert getattr(out, "action", "") == "proceed"
+    assert type(out).__name__ == "Proceed"
 
 
 def test_mode_validation():
