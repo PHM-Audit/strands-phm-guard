@@ -8,5 +8,5 @@ PhysicsConsistencyScorer (PR #3507).
 
 from .guard import PhysicsGuard, VerdictStats, check_tool_args, HARD_LIMITS
 
-__version__ = "0.1.0"
+__version__ = "0.2.1"
 __all__ = ["PhysicsGuard", "VerdictStats", "check_tool_args", "HARD_LIMITS"]
